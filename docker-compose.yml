@@ -35,3 +35,17 @@ services:
             - "${DB_PORT}"
         volumes:
             - ./mysql:/var/lib/mysql/
+    mysql-testing:
+        container_name: event-wave-db-testing
+        image: mysql:5.7
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+        ports:
+            - "3366:3306"
+        expose:
+            - 3366
+        volumes:
+            - ./mysql-testing:/var/lib/mysql/
