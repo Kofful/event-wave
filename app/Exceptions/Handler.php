@@ -3,6 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\UnauthorizedException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -25,5 +29,42 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof ValidationException) {
+            return response()->json(
+                ['errors' => $e->validator->errors()],
+                $e->status,
+            );
+        }
+
+        if ($e instanceof UnauthorizedException) {
+            return response(
+                [
+                    'message' => $e->getMessage() ?: 'Ця дія вимагає авторизації.',
+                ],
+                Response::HTTP_FORBIDDEN,
+            );
+        }
+
+        if ($e instanceof MethodNotAllowedHttpException) {
+            $acceptableMethods = implode(',', $e->getHeaders());
+
+            return response()->json(
+                ['message' => "{$request->getMethod()} метод не дозволено для цього ресурсу. Дозволені методи: {$acceptableMethods}."],
+                Response::HTTP_METHOD_NOT_ALLOWED,
+            );
+        }
+
+        if (env('APP_DEBUG') === false) {
+            return response()->json(
+                ['message' => 'Сталася помилка сервера.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+            );
+        }
+
+        return parent::render($request, $e);
     }
 }
