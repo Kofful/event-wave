@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
@@ -44,6 +45,15 @@ class Handler extends ExceptionHandler
             return response(
                 [
                     'message' => $e->getMessage() ?: 'Ця дія вимагає авторизації.',
+                ],
+                Response::HTTP_UNAUTHORIZED,
+            );
+        }
+
+        if ($e instanceof AuthenticationException) {
+            return response(
+                [
+                    'message' => 'Ця дія недоступна цьому користувачу.',
                 ],
                 Response::HTTP_FORBIDDEN,
             );
