@@ -24,7 +24,7 @@ class EventResource extends JsonResource
             'city' => CityResource::make($this->city),
             'name' => $this->name,
             'date' => $this->date,
-            'image' => env('APP_URL') . '/public/' . $this->image,
+            'image' => config('images.public_path') . $this->image,
             'description' => $this->description,
             'notes' => $this->notes,
             'created_at' => $this->created_at,

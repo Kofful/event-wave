@@ -13,6 +13,7 @@ services:
             - '9000:9000'
         volumes:
             - ./:/var/www/event-wave
+            - ./docker/php/user.ini:/usr/local/etc/php/conf.d/user.ini
     nginx:
         container_name: event-wave-nginx
         image: nginx:stable-alpine
