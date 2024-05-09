@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class EventRepository
 {
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 100;
 
     public function getEventsByFilters(array $filters): Collection
     {
