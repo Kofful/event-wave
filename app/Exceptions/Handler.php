@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof AuthenticationException) {
             return response(
                 [
-                    'message' => 'Ця дія недоступна цьому користувачу.',
+                    'message' => 'Ця дія не доступна цьому користувачу.',
                 ],
                 Response::HTTP_FORBIDDEN,
             );
