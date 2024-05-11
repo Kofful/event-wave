@@ -20,7 +20,7 @@ class CreateEventRequest extends FormRequest
         return [
             'city_id' => 'integer|required|min:1|exists:cities,id',
             'event_type_id' => 'integer|required|min:1|exists:event_types,id',
-            'name' => 'string|required|max:64',
+            'name' => 'required|string|max:64',
             'image' => 'image|required|max:10240',
             'date' => 'date|required|date_format:Y-m-d H:i|after:tomorrow',
             'description' => 'string|nullable',
@@ -46,11 +46,13 @@ class CreateEventRequest extends FormRequest
             'event_type_id.exists' => 'Параметр тип події не відповідає жодному існуючому типу.',
 
             'name.required' => "Параметр назва є обов'язковим.",
+            'name.string' => "Параметр назва має бути рядком.",
             'name.max' => "Параметр назва має бути не довше :max символів.",
 
             'image.image' => 'Параметр зображення має бути зображенням.',
             'image.required' => "Параметр зображення є обов'язковим.",
             'image.max' => 'Параметр зображення має бути не більше 10 МБ.',
+            'image.uploaded' => 'Не вдалось завантажити зображення.',
 
             'date.date' => 'Параметр дата має бути датою.',
             'date.required' => "Параметр дата є обов'язковим.",
