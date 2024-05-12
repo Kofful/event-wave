@@ -25,5 +25,6 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware(['auth', 'role:MANAGER'])->group(function () {
     Route::group(['prefix' => 'events'], function () {
         Route::post('/', [EventController::class, 'create']);
+        Route::put('/{event}', [EventController::class, 'update']);
     });
 });

@@ -27,4 +27,10 @@ class EventImageService
 
         $storage->put($fileName, $fileContents);
     }
+
+    public function deleteFile(string $fileName): void
+    {
+        $storage = Storage::disk('event_images');
+        $storage->delete($fileName);
+    }
 }

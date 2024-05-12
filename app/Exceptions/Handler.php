@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
@@ -50,7 +52,16 @@ class Handler extends ExceptionHandler
             );
         }
 
-        if ($e instanceof AuthenticationException) {
+        if ($e instanceof ModelNotFoundException) {
+            return response(
+                [
+                    'message' => 'Не вдалось знайти нічого за цим ідентифікатором.',
+                ],
+                Response::HTTP_NOT_FOUND,
+            );
+        }
+
+        if ($e instanceof AuthenticationException || $e instanceof AuthorizationException) {
             return response(
                 [
                     'message' => 'Ця дія не доступна цьому користувачу.',

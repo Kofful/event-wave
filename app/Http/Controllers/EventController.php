@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\GetAllEventsRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Http\Resources\CommonResourceCollection;
 use App\Http\Resources\EventDetailsResource;
 use App\Http\Resources\EventResource;
@@ -31,16 +32,6 @@ class EventController extends Controller
         return response()->json(new CommonResourceCollection($events, EventResource::class));
     }
 
-    // event creation page - fill in event data and tickets
-    //   - two requests POST /events and PUT /events/tickets
-    //   - one request with event data and all tickets
-    // event managing page - update event data and tickets
-    //   - separate requests for event data and each ticket
-    //     - may result in a lot of requests for a single event
-    //   - one request with event data and all tickets
-    //     - hard to find which tickets were deleted
-    //     - hard to find which tickets were updated
-    //     - hard to find which tickets were created
     public function create(CreateEventRequest $request): JsonResponse
     {
         $requestFile = $request->file('image');
@@ -54,6 +45,24 @@ class EventController extends Controller
         $this->ticketRepository->createTicketsByEventId($event->id, $request->input('tickets'));
 
         $this->eventImageService->saveFile($requestFile, $event->image);
+
+        $event->load(['city', 'eventType', 'tickets']);
+        return response()->json(new EventDetailsResource($event));
+    }
+
+    public function update(UpdateEventRequest $request, EventModel $event): JsonResponse
+    {
+        $requestFile = $request->file('image');
+        $dataToUpdate = $request->only(['city_id', 'event_type_id', 'name', 'date', 'description', 'notes']);
+
+        if ($requestFile) {
+            $dataToUpdate['image'] = $this->eventImageService->getFileName($requestFile);
+
+            $this->eventImageService->deleteFile($event->image);
+            $this->eventImageService->saveFile($requestFile, $dataToUpdate['image']);
+        }
+
+        $event->update($dataToUpdate);
 
         $event->load(['city', 'eventType', 'tickets']);
         return response()->json(new EventDetailsResource($event));
