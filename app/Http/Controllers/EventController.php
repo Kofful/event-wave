@@ -46,6 +46,7 @@ class EventController extends Controller
         $requestFile = $request->file('image');
         $eventData = $request->only(['city_id', 'event_type_id', 'name', 'date', 'description', 'notes']);
         $eventData['image'] = $this->eventImageService->getFileName($requestFile);
+        $eventData['owner_id'] = auth()->user()->id;
 
         /** @var EventModel $event */
         $event = EventModel::create($eventData);

@@ -22,6 +22,7 @@ class PostCreateEventTest extends TestCase
             'id',
             'name',
         ],
+        'owner_id',
         'tickets' => [
             '*' => [
                 'id',

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $image
  * @property string $description
  * @property string $notes
+ * @property int $owner_id
  * @property DateTime $created_at
  * @property DateTime $updated_at
  *
@@ -31,6 +32,7 @@ class EventModel extends Model
     protected $fillable = [
         'city_id',
         'event_type_id',
+        'owner_id',
         'name',
         'date',
         'image',

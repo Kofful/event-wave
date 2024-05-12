@@ -23,6 +23,7 @@ class EventDetailsResource extends JsonResource
             'id' => $this->id,
             'event_type' => EventTypeResource::make($this->eventType),
             'city' => CityResource::make($this->city),
+            'owner_id' => $this->owner_id,
             'name' => $this->name,
             'date' => $this->date,
             'image' => config('images.public_path') . $this->image,
