@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\UpdateOrderStatusRequest;
+use App\Http\Resources\CommonResourceCollection;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Ticket;
+use App\Repositories\OrderRepository;
 use App\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +19,7 @@ class OrderController extends Controller
 {
     public function __construct(
         private readonly PaymentService $paymentService,
+        private readonly OrderRepository $orderRepository,
     ) {
     }
 
@@ -61,5 +65,15 @@ class OrderController extends Controller
         return response()->json([
             'status' => 'success',
         ]);
+    }
+
+    public function getUserOrders(): JsonResponse
+    {
+        // TODO add tests
+        $userEmail = auth()->user()->email;
+
+        $orders = $this->orderRepository->getUserOrders($userEmail);
+
+        return response()->json(new CommonResourceCollection($orders, OrderResource::class));
     }
 }
