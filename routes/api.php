@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,8 @@ Route::group(['prefix' => 'events'], function () {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+
+Route::post('orders', [OrderController::class, 'createOrder']);
 
 Route::middleware(['auth', 'role:MANAGER'])->group(function () {
     Route::group(['prefix' => 'events'], function () {
