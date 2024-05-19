@@ -22,6 +22,10 @@ class OrderStatusSeeder extends Seeder
                 'id' => 3,
                 'name' => 'FAILED',
             ],
+            [
+                'id' => 4,
+                'name' => 'REFUNDED',
+            ]
         ];
 
         OrderStatus::query()->upsert($orderStatuses, ['id']);

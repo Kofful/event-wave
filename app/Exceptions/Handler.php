@@ -10,6 +10,7 @@ use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -76,6 +77,15 @@ class Handler extends ExceptionHandler
             return response()->json(
                 ['message' => "{$request->getMethod()} метод не дозволено для цього ресурсу. Дозволені методи: {$acceptableMethods}."],
                 Response::HTTP_METHOD_NOT_ALLOWED,
+            );
+        }
+
+        if ($e instanceof ServiceUnavailableHttpException) {
+            return response(
+                [
+                    'message' => $e->getMessage() ?: "Виникла помилка під час з'єднання зі стороннім сервісом.",
+                ],
+                Response::HTTP_BAD_REQUEST,
             );
         }
 

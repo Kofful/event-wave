@@ -52,7 +52,7 @@ class OrderController extends Controller
         $data = $request->input('data');
         $generatedSignature = $this->paymentService->getSignature($data);
 
-        Log::debug("\nVerifying signature: $signature\nReceived data: $data\nGenerated signature: $generatedSignature");
+        Log::info("\nVerifying signature: $signature\nReceived data: $data\nGenerated signature: $generatedSignature");
 
         if ($signature !== $generatedSignature) {
             return response()->json([
@@ -75,5 +75,21 @@ class OrderController extends Controller
         $orders = $this->orderRepository->getUserOrders($userEmail);
 
         return response()->json(new CommonResourceCollection($orders, OrderResource::class));
+    }
+
+    public function refund(Order $order): JsonResponse
+    {
+        // TODO add tests
+        $isSucceeded = $this->paymentService->refund($order);
+
+        if (!$isSucceeded) {
+            return response()->json([
+                'status' => 'error',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
 }

@@ -29,6 +29,7 @@ Route::post('update_order_status', [OrderController::class, 'updateOrderStatus']
 
 Route::middleware(['auth'])->group(function () {
    Route::get('my_orders', [OrderController::class, 'getUserOrders']);
+   Route::put('orders/{order}/refund', [OrderController::class, 'refund']);
 });
 
 Route::middleware(['auth', 'role:MANAGER'])->group(function () {

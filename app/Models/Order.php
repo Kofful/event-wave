@@ -17,6 +17,7 @@ class Order extends Model
     public const PENDING_STATUS_ID = 1;
     public const SUCCESS_STATUS_ID = 2;
     public const FAILED_STATUS_ID = 3;
+    public const REFUNDED_STATUS_ID = 4;
 
     protected $fillable = [
         'ticket_id',
