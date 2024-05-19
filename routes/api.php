@@ -25,6 +25,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::post('orders', [OrderController::class, 'createOrder']);
+Route::post('update_order_status', [OrderController::class, 'updateOrderStatus']);
 
 Route::middleware(['auth', 'role:MANAGER'])->group(function () {
     Route::group(['prefix' => 'events'], function () {

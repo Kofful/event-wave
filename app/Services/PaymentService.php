@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Order;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 
 class PaymentService
@@ -48,5 +49,23 @@ class PaymentService
         $shaEncodedSignature = sha1($this->privateKey . $base64Data . $this->privateKey, true);
 
         return base64_encode($shaEncodedSignature);
+    }
+
+    public function updateOrderStatus(string $base64Data): void
+    {
+        $data = json_decode(base64_decode($base64Data), true);
+
+        // retrieve number from string like "environment_order_42"
+        $orderId = Arr::last(explode('_', $data['order_id']));
+        $statusId = $data['status'] === 'success' ? Order::SUCCESS_STATUS_ID : Order::FAILED_STATUS_ID;
+
+        /** @var Order $order */
+        $order = Order::query()->findOrFail($orderId);
+
+        $order->update([
+            'order_status_id' => $statusId,
+            'completion_date' => $data['completion_date'],
+            'liqpay_order_id' => $data['liqpay_order_id'],
+        ]);
     }
 }

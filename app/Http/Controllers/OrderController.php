@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrderRequest;
+use App\Http\Requests\UpdateOrderStatusRequest;
 use App\Models\Order;
 use App\Models\Ticket;
 use App\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
@@ -36,6 +39,27 @@ class OrderController extends Controller
         return response()->json([
             'data' => $requestData,
             'signature' => $signature,
+        ]);
+    }
+
+    public function updateOrderStatus(UpdateOrderStatusRequest $request): JsonResponse
+    {
+        $signature = $request->input('signature');
+        $data = $request->input('data');
+        $generatedSignature = $this->paymentService->getSignature($data);
+
+        Log::debug("\nVerifying signature: $signature\nReceived data: $data\nGenerated signature: $generatedSignature");
+
+        if ($signature !== $generatedSignature) {
+            return response()->json([
+                'error' => 'Неправильний підпис.',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $this->paymentService->updateOrderStatus($data);
+
+        return response()->json([
+            'status' => 'success',
         ]);
     }
 }
