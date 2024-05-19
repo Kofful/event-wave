@@ -11,12 +11,14 @@ class PaymentService
 {
     private string $privateKey;
     private string $publicKey;
+    private string $serverUrl;
     private string $environment;
 
     public function __construct()
     {
         $this->privateKey = config('payments.liqpay.private_key');
         $this->publicKey = config('payments.liqpay.public_key');
+        $this->serverUrl = config('payments.liqpay.server_url');
         $this->environment = config('app.env');
     }
 
@@ -35,9 +37,11 @@ class PaymentService
             'description' => "{$event->name} $eventDate - $ticket->name",
             'order_id' => "{$this->environment}_order_{$order->id}",
             'language' => 'uk',
-            //TODO set
-            // 'server_url'
         ];
+
+        if (env('APP_ENV') !== 'local') {
+            $data['server_url'] = $this->serverUrl;
+        }
 
         $dataJson = json_encode($data, JSON_UNESCAPED_UNICODE);
 
