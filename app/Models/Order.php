@@ -24,7 +24,8 @@ class Order extends Model
         'email',
         'first_name',
         'last_name',
-        'completion_date',
+        'liqpay_payment_id',
+        'end_date',
     ];
 
     public function ticket(): BelongsTo

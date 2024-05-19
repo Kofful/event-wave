@@ -68,8 +68,8 @@ class PaymentService
 
         $order->update([
             'order_status_id' => $statusId,
-            'completion_date' => $data['completion_date'],
-            'liqpay_order_id' => $data['liqpay_order_id'],
+            'end_date' => $data['end_date'],
+            'liqpay_payment_id' => $data['payment_id'],
         ]);
     }
 }
