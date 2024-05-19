@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'events'], function () {
     Route::get('/', [EventController::class, 'getAllEvents']);
+    Route::get('/{event}', [EventController::class, 'getEvent']);
 });
 
 Route::post('register', [AuthController::class, 'register']);

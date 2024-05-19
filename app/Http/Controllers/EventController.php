@@ -32,6 +32,13 @@ class EventController extends Controller
         return response()->json(new CommonResourceCollection($events, EventResource::class));
     }
 
+    public function getEvent(EventModel $event): JsonResponse
+    {
+        // TODO add tests
+
+        return response()->json(new EventDetailsResource($event));
+    }
+
     public function create(CreateEventRequest $request): JsonResponse
     {
         $requestFile = $request->file('image');
