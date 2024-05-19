@@ -68,7 +68,7 @@ class PaymentService
 
         $order->update([
             'order_status_id' => $statusId,
-            'end_date' => $data['end_date'],
+            'end_date' => Carbon::createFromTimestampMs($data['end_date']),
             'liqpay_payment_id' => $data['payment_id'],
         ]);
     }
