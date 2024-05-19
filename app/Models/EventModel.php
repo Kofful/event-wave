@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
- * @property string name
+ * @property string $name
  * @property DateTime $date
  * @property string $image
  * @property string $description
@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $owner_id
  * @property DateTime $created_at
  * @property DateTime $updated_at
+ * @property ?int $tickets_min_price
  *
  * @property EventType $eventType
  * @property City $city

@@ -27,6 +27,7 @@ class EventResource extends JsonResource
             'image' => config('images.public_path') . $this->image,
             'description' => $this->description,
             'notes' => $this->notes,
+            'tickets_min_price' => $this->tickets_min_price,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

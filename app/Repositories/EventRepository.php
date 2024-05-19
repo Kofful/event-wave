@@ -30,6 +30,7 @@ class EventRepository
             ->when(isset($filters['date_to']), function ($query) use ($filters) {
                 return $query->whereDate('date', '<=', $filters['date_to']);
             })
+            ->withMin('tickets', 'price')
             ->limit(self::PAGE_SIZE)
             ->offset(($page - 1) * self::PAGE_SIZE)
             ->get();

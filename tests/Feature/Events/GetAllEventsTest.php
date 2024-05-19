@@ -27,6 +27,7 @@ class GetAllEventsTest extends TestCase
                 'image',
                 'description',
                 'notes',
+                'tickets_min_price',
                 'created_at',
                 'updated_at',
             ],
